@@ -1,0 +1,114 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'eeepay'
+            keyPassword 'eeepay'
+            storeFile file('androidkeystore1.jks')
+            storePassword 'eeepay'
+        }
+    }
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.bitus.web"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled = true
+       // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            //设置支持的so库
+            abiFilters "armeabi", "armeabi-v7a"
+        }
+        //必须要保证所有的flavor 都属于同一个维度
+        //flavorDimensions "default"
+    }
+    buildTypes {
+        release {
+            // 不显示Log
+            buildConfigField "boolean", "DEBUG_MODEL", "true"
+            minifyEnabled false
+            shrinkResources false //移除无用的资源
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            zipAlignEnabled false
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false //移除无用的资源
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 显示Log
+            buildConfigField "boolean", "DEBUG_MODEL", "true"
+            signingConfig signingConfigs.config
+            zipAlignEnabled false
+            testCoverageEnabled false
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+
+        disable 'InvalidPackage', 'HardcodedText'
+    }
+    dexOptions {
+//        incremental true
+        preDexLibraries = false
+        jumboMode true
+        javaMaxHeapSize "4g"
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+    }
+    configurations {
+        all*.exclude group: 'com.nineoldandroids', module: 'library' //去除重复依赖库
+    }
+//    //多渠道打包模式
+//    productFlavors {
+//        //bitus
+//        bitus {
+//            applicationId 'com.web_bitus_h5'
+//            minSdkVersion 15
+//            versionCode 100
+//            versionName '1.0.0'
+//            signingConfig signingConfigs.config
+//            manifestPlaceholders = [app_name: "bitus"]
+//        }
+//    }
+    //打包模式
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            //生成自定义 App 名称
+            if (variant.buildType.name.equals("release")) {
+                def appName = "" + variant.productFlavors.name + "_v" + variant.productFlavors.versionName + "_" + new Date().format("yyyyMMdd_HHmm") + ".apk"
+                def appName2 = appName.replace("[", "");
+                def appName3 = appName2.replace("]", "");
+                //add by zhuangzeqin 2017年11月16日 17:42:11 自定义生成目录--根据不同的渠道项目名称去生成目录
+                def version = "v" + variant.productFlavors.versionName;//版本号
+                def channel_name = variant.productFlavors.manifestPlaceholders.getAt("app_name").toString();
+                //渠道的项目名称
+                def dirName = channel_name + "/" + version + "/" + appName3//目录生成
+                def dirNameTimp = dirName.replace("[", "")
+                def dirNameLast = dirNameTimp.replace("]", "")
+                outputFileName = dirNameLast
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+//    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
