@@ -15,7 +15,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         multiDexEnabled = true
         //只保留指定和默认的资源
         resConfigs('zh-rCN')
@@ -90,17 +90,18 @@ android {
         variant.outputs.all { output ->
             //生成自定义 App 名称
             if (variant.buildType.name.equals("release")) {
-                def appName = "" + variant.productFlavors.name + "_v" + variant.productFlavors.versionName + "_" + new Date().format("yyyyMMdd_HHmm") + ".apk"
-                def appName2 = appName.replace("[", "");
-                def appName3 = appName2.replace("]", "");
-                //add by zhuangzeqin 2017年11月16日 17:42:11 自定义生成目录--根据不同的渠道项目名称去生成目录
-                def version = "v" + variant.productFlavors.versionName;//版本号
-                def channel_name = variant.productFlavors.manifestPlaceholders.getAt("app_name").toString();
-                //渠道的项目名称
-                def dirName = channel_name + "/" + version + "/" + appName3//目录生成
-                def dirNameTimp = dirName.replace("[", "")
-                def dirNameLast = dirNameTimp.replace("]", "")
-                outputFileName = dirNameLast
+//                def appName = "" + variant.productFlavors.name + "_v" + variant.productFlavors.versionName + "_" + new Date().format("yyyyMMdd_HHmm") + ".apk"
+//                def appName2 = appName.replace("[", "");
+//                def appName3 = appName2.replace("]", "");
+//                //add by zhuangzeqin 2017年11月16日 17:42:11 自定义生成目录--根据不同的渠道项目名称去生成目录
+//                def version = "v" + variant.productFlavors.versionName;//版本号
+//                def channel_name = variant.productFlavors.manifestPlaceholders.getAt("app_name").toString();
+//                //渠道的项目名称
+//                def dirName = channel_name + "/" + version + "/" + appName3//目录生成
+//                def dirNameTimp = dirName.replace("[", "")
+//                def dirNameLast = dirNameTimp.replace("]", "")
+                def app = "bitus"+"_"+defaultConfig.versionName + "_" + new Date().format("yyyyMMdd_HHmm") + ".apk"
+                outputFileName = app
             }
         }
     }
@@ -110,6 +111,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    // 基础依赖包，必须要依赖
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
 //    testImplementation 'junit:junit:4.12'
 //    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
