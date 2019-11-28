@@ -5,17 +5,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.Window;
 import android.webkit.DownloadListener;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.bitus.web.ui.BaseActivity;
 import com.bitus.web.utils.ConfigUrl;
 
 /**
@@ -26,15 +23,13 @@ import com.bitus.web.utils.ConfigUrl;
  * 时间：2019/11/27 20:13
  * 邮箱：1546374673@qq.com
  */
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends BaseActivity {
     private WebView mWebView;//webview 加载
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+    /**
+     * 初始化webview
+     */
+    private void initWebview() {
         mWebView = (WebView) findViewById(R.id.wv_web);
         //支持javascript
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -63,14 +58,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//                        super.onPageStarted(view, url, favicon);
-//                        showProgressDialog("加载中，请稍等");
+                showLoading();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-//                        super.onPageFinished(view, url);
-//                        dismissProgressDialog();
+                hideLoading();
             }
 
             @Override
@@ -79,6 +72,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mWebView.loadUrl(ConfigUrl.WEB_URL);
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initWidget() {
+        initWebview();
+    }
+
+    @Override
+    protected void eventOnClick() {
+
     }
 
     /**
@@ -91,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onDownloadStart(String url, String userAgent,
                                     String contentDisposition, String mimetype, long contentLength) {
+            hideLoading();
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
@@ -119,16 +128,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /**
-     * 设置状态栏问题颜色（黑/白）
-     *
-     * @param isLight true:白色 false:黑色
-     */
-    protected void setStatusBarTextLight(boolean isLight) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | (isLight ? View.SYSTEM_UI_FLAG_LAYOUT_STABLE : View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
-        }
-    }
 }

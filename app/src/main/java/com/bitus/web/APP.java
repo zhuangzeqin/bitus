@@ -3,14 +3,19 @@ package com.bitus.web;
 import android.app.Application;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-
+ /**
+   * 描述：Application 基类
+   * 作者：zhuangzeqin
+   * 时间: 2019/11/28-11:14
+   * 邮箱：zzq@eeepay.cn
+   * 备注:
+   */
 public class APP extends Application {
     private static APP mInstance = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
     }
 
     @Override
