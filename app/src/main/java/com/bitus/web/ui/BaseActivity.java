@@ -92,6 +92,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return null;
     }
 
+
     /**
      * @return 布局id
      */

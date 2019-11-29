@@ -8,5 +8,6 @@ package com.bitus.web.utils;
  */
 public final class ConfigUrl {
     public static final String WEB_URL = "https://web.bitus.com/";
+    public static final String WEB_URL2 = "https://www.jianshu.com/p/3c94ae673e2a";
     public static final int WEB_REQUESTCODE = 1001;
 }

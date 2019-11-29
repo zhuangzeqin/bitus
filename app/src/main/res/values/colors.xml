@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="origin">#FF7922</color>
     <color name="transparent">#00000000</color>
+    <color name="hui">#999999</color>
+    <color name="hui2">#80000000</color>
 </resources>
