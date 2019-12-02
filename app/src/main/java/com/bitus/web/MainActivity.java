@@ -6,7 +6,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -31,7 +30,6 @@ import com.bitus.web.utils.ConfigUrl;
  */
 public class MainActivity extends BaseActivity {
     private WebView mWebView;//webview 加载
-    private Handler handler = new Handler();
     private ImageView mImageView;
     private AnimationDrawable mAnimation;
     /**
